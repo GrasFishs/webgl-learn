@@ -5,7 +5,8 @@ module.exports = {
   },
   'extends': [
     'eslint:recommended',
-    'plugin:@typescript-eslint/recommended'
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended'
   ],
   'parser': '@typescript-eslint/parser',
   'parserOptions': {
@@ -31,6 +32,9 @@ module.exports = {
     'semi': [
       'error',
       'never'
-    ]
+    ],
+    '@typescript-eslint/no-non-null-assertion': 0,
+    '@typescript-eslint/no-empty-function': 0,
+    '@typescript-eslint/no-inferrable-types': 0
   }
 }
