@@ -42,24 +42,19 @@ class Game extends Renderer {
     const [proj, view, model] = [mat4.create(), mat4.create(), mat4.create()]
     // mat4.ortho(proj, -2, 2, -15, 1.5, -1, 1)
     mat4.perspective(proj, Math.PI / 4, this.width / this.height, 1 / 256, 256)
-    mat4.translate(view, view, vec3.fromValues(0, 0, -3))
+    mat4.lookAt(view, vec3.fromValues(0, 0, 3), vec3.fromValues(0, 0, 0), vec3.fromValues(0, 1, 0))
     shader.setUniform4f('u_Color', 0.2, 0, 0, 1)
     shader.setUniformMatrix4fv('u_proj', proj)
     shader.setUniformMatrix4fv('u_view', view)
+    const radians = (Math.PI / 180) * 45
+    mat4.rotate(model, model, radians, vec3.fromValues(1, 1, 0))
+    shader.setUniformMatrix4fv('u_model', model)
     this.drawCall(() => {
-      const radians = (Math.PI / 180) * 2
-      mat4.rotate(
-        model,
-        model,
-        radians,
-        vec3.fromValues(Math.random(), Math.random(), Math.random())
-      )
-      shader.setUniformMatrix4fv('u_model', model)
       vb.draw()
     })
   }
 }
 
-const game = new Game()
+const game = new Game(document.querySelector('canvas')!)
 
 game.render()

@@ -8,9 +8,7 @@ export abstract class Renderer {
   protected width = 640
   protected height = 460
 
-  constructor() {
-    const cvs = document.createElement('canvas')
-    document.body.appendChild(cvs)
+  constructor(cvs: HTMLCanvasElement) {
     cvs.width = this.width
     cvs.height = this.height
     this.gl = cvs.getContext('webgl2')!
