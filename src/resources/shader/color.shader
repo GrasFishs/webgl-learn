@@ -19,6 +19,6 @@ uniform sampler2D u_Texture;
 uniform sampler2D u_Texture2;
 varying vec2 v_coord;
 void main () {
-  vec4 tex = mix(texture2D(u_Texture2, v_coord), texture2D(u_Texture, v_coord), 0.2);
+  vec4 tex = mix(texture2D(u_Texture2, v_coord), texture2D(u_Texture, v_coord), 0.5);
   gl_FragColor = tex;
 }

@@ -1,4 +1,4 @@
-type DrawCall = () => void
+type DrawCall = (timestamp: number) => void
 
 export abstract class Renderer {
   private gl: WebGL2RenderingContext
@@ -30,19 +30,19 @@ export abstract class Renderer {
     this.drawCalls.push(cb)
   }
 
-  protected draw() {
+  protected draw(timestamp: number) {
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0)
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
-    this.drawCalls.forEach((call) => call())
-    this.id = window.requestAnimationFrame(() => {
-      this.draw()
+    this.drawCalls.forEach((call) => call(timestamp))
+    this.id = window.requestAnimationFrame((timestamp) => {
+      this.draw(timestamp)
     })
   }
 
   protected abstract init(gl: WebGL2RenderingContext): Promise<void>
 
   private start() {
-    this.draw()
+    this.draw(0)
   }
 
   public pause() {
