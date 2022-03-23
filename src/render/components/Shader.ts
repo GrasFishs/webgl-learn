@@ -54,6 +54,10 @@ export class Shader {
     this.gl.uniform4f(this.getLocation(name), x, y, z, w)
   }
 
+  public setUniformMatrix4fv(name: string, data: Float32List) {
+    this.gl.uniformMatrix4fv(this.getLocation(name), false, data)
+  }
+
   public bind() {
     this.gl.useProgram(this.id)
   }
