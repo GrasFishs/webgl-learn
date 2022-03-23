@@ -1,7 +1,7 @@
 export class VertexBuffer {
   private id: WebGLBuffer
 
-  constructor(private data: Float32Array, private gl: WebGL2RenderingContext) {
+  constructor(data: Float32Array, private count: number, private gl: WebGL2RenderingContext) {
     this.id = gl.createBuffer()!
     this.bind()
     gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW)
@@ -16,6 +16,6 @@ export class VertexBuffer {
   }
 
   public draw() {
-    this.gl.drawArrays(this.gl.TRIANGLES, 0, this.data.length / 3)
+    this.gl.drawArrays(this.gl.TRIANGLES, 0, this.count)
   }
 }

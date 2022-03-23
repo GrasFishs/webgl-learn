@@ -12,9 +12,12 @@ export class Camera {
     vec3.set(this.up, 0, 1, 0)
   }
 
-  public setPosition(x: number | vec3, y: number, z: number) {
+  public setPosition(pos: vec3): void
+  public setPosition(x: number, y: number, z: number): void
+
+  public setPosition(x: number | vec3, y?: number, z?: number) {
     if (typeof x === 'number') {
-      vec3.set(this.position, x, y, z)
+      vec3.set(this.position, x, y!, z!)
     } else {
       vec3.copy(this.position, x)
     }
