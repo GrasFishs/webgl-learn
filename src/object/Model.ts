@@ -14,19 +14,19 @@ export abstract class Model {
   }
 
   public translate(x: number, y: number, z: number) {
-    mat4.translate(this.m, this.m, vec3.fromValues(x, y, z))
+    this.position(x, y, z)
   }
 
   public translateX(x: number) {
-    mat4.translate(this.m, this.m, vec3.fromValues(x, 0, 0))
+    this.position(x, this.m[13], this.m[14])
   }
 
   public translateY(y: number) {
-    mat4.translate(this.m, this.m, vec3.fromValues(0, y, 0))
+    this.position(this.m[12], y, this.m[14])
   }
 
   public translateZ(z: number) {
-    mat4.translate(this.m, this.m, vec3.fromValues(0, 0, z))
+    this.position(this.m[12], this.m[13], z)
   }
 
   public rotate(rad: number, xAxis: number = 0, yAxis: number = 0, zAxis: number = 0) {
@@ -43,6 +43,10 @@ export abstract class Model {
 
   public rotateZ(rad: number) {
     mat4.rotateZ(this.m, this.m, rad)
+  }
+
+  public scale(x: number, y: number, z: number) {
+    mat4.scale(this.m, this.m, vec3.fromValues(x, y, z))
   }
 
   public get() {

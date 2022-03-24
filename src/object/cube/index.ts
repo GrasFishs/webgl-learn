@@ -8,6 +8,7 @@ import sStr from './shader.shader?raw'
 import { Model } from '../Model'
 import { Camera } from '../Camera'
 import { Light } from '../Light'
+import { mat4, vec4 } from 'gl-matrix'
 
 // z越大越靠前
 // 下，前，右，后，左，上
@@ -28,10 +29,19 @@ const indexes = new Int16Array(
 )
 
 export class Cube extends Model {
-  private vb: VertexBuffer
-  private ib: IndexBuffer
-  private va: VertexArray
-  private shader: Shader
+  protected vb: VertexBuffer
+  protected ib: IndexBuffer
+  protected va: VertexArray
+  protected shader: Shader
+  protected color: vec4 = vec4.create()
+
+  public setColor(color: vec4) {
+    this.color = color
+  }
+
+  public getColor() {
+    return this.color
+  }
 
   constructor(gl: WebGL2RenderingContext) {
     super()
@@ -43,13 +53,16 @@ export class Cube extends Model {
     this.va.add('normal', 3, gl.FLOAT)
     this.va.add('coord', 2, gl.FLOAT)
     this.va.bind(this.vb)
-    this.shader.setUniform4f('u_Color', 1, 0, 0, 1)
   }
 
   public draw(light: Light, camera: Camera, proj: Projection) {
+    this.shader.bind()
+    this.shader.setUniform4f('u_Color', this.color[0], this.color[1], this.color[2], this.color[3])
     this.shader.setUniformMatrix4fv('v', camera.get())
     this.shader.setUniformMatrix4fv('p', proj.get())
     this.shader.setUniformMatrix4fv('m', this.get())
+    const t = mat4.transpose(mat4.create(), mat4.invert(mat4.create(), this.get()))
+    this.shader.setUniformMatrix4fv('u_normalMatrix', t)
 
     this.shader.setUniform3f('u_lightPos', light.pos())
     this.shader.setUniform4f('u_lightColor', light.getColor())
