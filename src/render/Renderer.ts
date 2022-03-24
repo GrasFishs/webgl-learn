@@ -19,8 +19,9 @@ export abstract class Renderer {
   }
 
   public render() {
+    this.clear()
     this.init(this.gl).then(() => {
-      this.start()
+      this.drawCalls.length > 0 && this.start()
     })
   }
 
@@ -29,12 +30,16 @@ export abstract class Renderer {
   }
 
   protected draw(timestamp: number) {
-    this.gl.clearColor(0.0, 0.0, 0.0, 1.0)
-    this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
+    this.clear()
     this.drawCalls.forEach((call) => call(timestamp))
     this.id = window.requestAnimationFrame((timestamp) => {
       this.draw(timestamp)
     })
+  }
+
+  protected clear() {
+    this.gl.clearColor(0.0, 0.0, 0.0, 1.0)
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
   }
 
   protected abstract init(gl: WebGL2RenderingContext): Promise<void>

@@ -1,3 +1,5 @@
+import { vec3, vec4 } from 'gl-matrix'
+
 enum ShaderType {
   Vert,
   Frag,
@@ -50,8 +52,26 @@ export class Shader {
     this.gl.uniform1i(this.getLocation(name), value)
   }
 
-  public setUniform4f(name: string, x: number, y: number, z: number, w: number) {
-    this.gl.uniform4f(this.getLocation(name), x, y, z, w)
+  public setUniform4f(name: string, x: number, y: number, z: number, w: number): void
+  public setUniform4f(name: string, v: vec4): void
+
+  public setUniform4f(name: string, x: number | vec4, y?: number, z?: number, w?: number) {
+    if (typeof x === 'number') {
+      this.gl.uniform4f(this.getLocation(name), x, y!, z!, w!)
+    } else {
+      this.gl.uniform4f(this.getLocation(name), x[0], x[1], x[2], x[3])
+    }
+  }
+
+  public setUniform3f(name: string, x: number, y: number, z: number): void
+  public setUniform3f(name: string, v: vec3): void
+
+  public setUniform3f(name: string, x: number | vec3, y?: number, z?: number) {
+    if (typeof x === 'number') {
+      this.gl.uniform3f(this.getLocation(name), x, y!, z!)
+    } else {
+      this.gl.uniform3f(this.getLocation(name), x[0], x[1], x[2])
+    }
   }
 
   public setUniformMatrix4fv(name: string, data: Float32List) {
@@ -73,7 +93,8 @@ export class Shader {
     gl.compileShader(shader)
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
       const info = gl.getShaderInfoLog(shader)
-      throw 'Could not compile WebGL program. \n\n' + info
+      const typeName = type === gl.VERTEX_SHADER ? 'vertex' : 'fragment'
+      throw 'Could not compile ' + typeName + ' program. \n\n' + info
     }
     gl.attachShader(this.id, shader)
     gl.deleteShader(shader)
