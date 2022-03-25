@@ -3,10 +3,9 @@ import { Cube } from './cube'
 
 export class Light extends Cube {
   constructor({ color, pos }: { color: vec4; pos: vec3 }, gl: WebGL2RenderingContext) {
-    super(gl)
+    super([0.1, 0.1, 0.1], gl)
     this.color = color
     this.translate(pos[0], pos[1], pos[2])
-    this.scale(0.1, 0.1, 0.1)
   }
 
   protected async doSetup() {

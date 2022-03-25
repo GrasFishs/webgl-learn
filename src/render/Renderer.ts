@@ -16,6 +16,7 @@ export abstract class Renderer {
     this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA)
 
     this.gl.enable(this.gl.DEPTH_TEST)
+    console.log(this.gl.getParameter(this.gl.SHADING_LANGUAGE_VERSION))
   }
 
   public render() {

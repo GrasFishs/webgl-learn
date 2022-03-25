@@ -65,6 +65,7 @@ export abstract class Mesh extends Model {
 
   public draw(light: Light, camera: Camera, proj: Projection) {
     this.shader.bind()
+    this.va.bind(this.vb)
     this.doDraw()
     this.shader.setUniformMatrix4fv('v', camera.get())
     this.shader.setUniformMatrix4fv('p', proj.get())
@@ -72,6 +73,7 @@ export abstract class Mesh extends Model {
     const t = mat4.transpose(mat4.create(), mat4.invert(mat4.create(), this.get()))
     this.shader.setUniformMatrix4fv('u_normalMatrix', t)
 
+    this.shader.setUniform3f('u_cameraPos', camera.pos())
     this.shader.setUniform3f('u_lightPos', light.pos())
     this.shader.setUniform4f('u_lightColor', light.getColor())
     this.ib.draw()
