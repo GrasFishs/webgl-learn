@@ -24,6 +24,9 @@ uniform vec3 u_lightPos;
 uniform vec4 u_lightColor;
 uniform mat4 u_normalMatrix;
 uniform int u_light;
+uniform int u_tex;
+uniform sampler2D u_Texture;
+
 varying vec2 v_coord;
 varying vec3 v_normal;
 varying vec3 v_fragPos;
@@ -54,6 +57,9 @@ void main () {
   }
   if (u_light == 1) {
     color = u_Color;
+  }
+  if (u_tex == 1) {
+    color = lighting * texture2D(u_Texture, v_coord);
   }
   gl_FragColor =  color;
 }

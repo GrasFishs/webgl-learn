@@ -9,6 +9,7 @@ import { Model } from '../Model'
 import { Camera } from '../Camera'
 import { Light } from '../Light'
 import { mat4, vec4 } from 'gl-matrix'
+import { Texture } from '../../render/components/Texture'
 
 // z越大越靠前
 // 下，前，右，后，左，上
@@ -33,6 +34,7 @@ export class Cube extends Model {
   protected ib: IndexBuffer
   protected va: VertexArray
   protected shader: Shader
+  protected texture: Texture | null = null
   protected color: vec4 = vec4.create()
 
   public setColor(color: vec4) {
@@ -41,6 +43,10 @@ export class Cube extends Model {
 
   public getColor() {
     return this.color
+  }
+
+  public setTexture(texture: Texture) {
+    this.texture = texture
   }
 
   constructor(gl: WebGL2RenderingContext) {
@@ -55,6 +61,15 @@ export class Cube extends Model {
     this.va.bind(this.vb)
   }
 
+  public beforeDraw() {
+    if (this.texture) {
+      this.texture.bind(0)
+      this.shader.bind()
+      this.shader.setUniform1i('u_tex', 1)
+      this.shader.setUniform1i('u_Texture', 0)
+    }
+  }
+
   public draw(light: Light, camera: Camera, proj: Projection) {
     this.shader.bind()
     this.shader.setUniform4f('u_Color', this.color[0], this.color[1], this.color[2], this.color[3])
@@ -66,7 +81,6 @@ export class Cube extends Model {
 
     this.shader.setUniform3f('u_lightPos', light.pos())
     this.shader.setUniform4f('u_lightColor', light.getColor())
-    this.shader.bind()
     this.ib.draw()
   }
 }

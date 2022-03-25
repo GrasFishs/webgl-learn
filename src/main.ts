@@ -5,6 +5,8 @@ import { radians } from './utils/math'
 import { Cube } from './object/cube'
 import { Camera } from './object/Camera'
 import { Light } from './object/Light'
+import { Texture } from './render/components/Texture'
+import wall from './resources/img/wall.jpg'
 
 class Game extends Renderer {
   width = 800
@@ -20,6 +22,9 @@ class Game extends Renderer {
       },
       gl
     )
+    const tex = new Texture(gl)
+    await tex.load(wall, gl.LINEAR)
+    cube.setTexture(tex)
     const cube2 = new Cube(gl)
     cube2.setColor([1, 0, 0, 1])
     cube2.scale(0.5, 0.5, 0.5)
@@ -28,8 +33,10 @@ class Game extends Renderer {
     cam.lookAt(cube.pos())
     let angle = 90
     const len = 2
+    cube.beforeDraw()
+    cube2.beforeDraw()
     this.drawCall(() => {
-      angle += 0.01
+      angle += 0.05
       cube.rotateY(radians(1))
       cube2.rotateY(radians(1))
       light.position(len * Math.sin(angle), len * Math.cos(angle), len * Math.cos(angle))
