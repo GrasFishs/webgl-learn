@@ -1,12 +1,15 @@
+type TextureParam = { src: string; filter: GLenum }
+
 export class Texture {
   private id: WebGLTexture
-  constructor(private gl: WebGL2RenderingContext) {
+  constructor(private param: TextureParam, private gl: WebGL2RenderingContext) {
     this.id = gl.createTexture()!
     // 图像Y翻转
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true)
   }
 
-  load(src: string, filter: GLenum) {
+  setup() {
+    const { src, filter } = this.param
     const gl = this.gl
     const img = new Image()
     const format = src.endsWith('.png') ? gl.RGBA : gl.RGB

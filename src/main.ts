@@ -22,19 +22,20 @@ class Game extends Renderer {
       },
       gl
     )
-    const tex = new Texture(gl)
-    await tex.load(wall, gl.LINEAR)
-    cube.setTexture(tex)
+    const tex = new Texture({ src: wall, filter: gl.LINEAR }, gl)
+    cube.addTexture(tex)
     const cube2 = new Cube(gl)
     cube2.setColor([1, 0, 0, 1])
     cube2.scale(0.5, 0.5, 0.5)
     cube2.translate(1, 0, 1)
     cube2.rotate(radians(45), 1, 0, 0)
+    await light.setup()
+    await cube.setup()
+    await cube2.setup()
     cam.lookAt(cube.pos())
+
     let angle = 90
     const len = 2
-    cube.beforeDraw()
-    cube2.beforeDraw()
     this.drawCall(() => {
       angle += 0.05
       cube.rotateY(radians(1))

@@ -1,7 +1,7 @@
 #shader vert
-attribute vec4 pos;
-attribute vec3 normal;
-attribute vec2 coord;
+attribute vec4 Position;
+attribute vec3 Normal;
+attribute vec2 Coord;
 varying vec2 v_coord;
 varying vec3 v_normal;
 varying vec3 v_fragPos;
@@ -11,10 +11,10 @@ uniform mat4 v;
 uniform mat4 m;
 
 void main () {
-  gl_Position = p * v * m * pos;
-  v_coord = coord;
-  v_normal = normal;
-  v_fragPos = vec3(m * pos);
+  gl_Position = p * v * m * Position;
+  v_coord = Coord;
+  v_normal = Normal;
+  v_fragPos = vec3(m * Position);
 }
 
 #shader frag
@@ -24,7 +24,7 @@ uniform vec3 u_lightPos;
 uniform vec4 u_lightColor;
 uniform mat4 u_normalMatrix;
 uniform int u_light;
-uniform int u_tex;
+uniform int u_useTexture;
 uniform sampler2D u_Texture;
 
 varying vec2 v_coord;
@@ -58,7 +58,7 @@ void main () {
   if (u_light == 1) {
     color = u_Color;
   }
-  if (u_tex == 1) {
+  if (u_useTexture == 1) {
     color = lighting * texture2D(u_Texture, v_coord);
   }
   gl_FragColor =  color;
